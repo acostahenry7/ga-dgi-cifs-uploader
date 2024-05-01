@@ -1,0 +1,47 @@
+.App {
+  text-align: center;
+  background-color: #343a40;
+}
+
+.nav {
+  background-color: #f8f9fa;
+  padding: 0 10px;
+}
+
+.navbar {
+  padding: 15px 50px;
+}
+
+.nav-banner {
+  display: flex;
+  align-items: center;
+}
+
+.nav-banner h3 {
+  margin: 0 0 0 15px;
+  color: #343a40;
+  font-weight: bold;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 27px;
+}
+
+.wrapper {
+  background-color: #f1f2f4;
+  padding: 50px 67px;
+  height: auto;
+  min-height: 100vh;
+}
+
+@media screen and (max-width: 600px) {
+  .wrapper {
+    padding: 50px 20px;
+  }
+
+  .nav {
+    padding: 0;
+  }
+
+  .navbar {
+    padding: 10px 15px;
+  }
+}

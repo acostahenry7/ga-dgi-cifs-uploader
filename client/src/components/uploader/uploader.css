@@ -1,0 +1,30 @@
+.uploader {
+  /*width: 400px;*/
+  display: flex;
+  padding: 40px;
+  justify-content: center;
+  background-color: #808080;
+  box-shadow: 0 0 10px #808080;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.uploader i {
+  font-size: 60px;
+  color: white;
+}
+
+.summary-sections p {
+  margin: 0;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 767px) {
+  .uploader {
+    width: 100%;
+  }
+
+  .summary {
+    margin-top: 15px;
+  }
+}
