@@ -40,7 +40,7 @@ module.exports = (injectedStore) => {
 
       arr.map((item) => {
         result.push({
-          vin: item.chasis,
+          vin: item.Chasis,
           brand: item.Marca,
           model: item.Modelo,
           year: item["Año"],

@@ -1,6 +1,6 @@
 module.exports = {
   app: {
-    port: process.env.PORT || 3001,
+    port: process.env.CIF_DGI_PORT || 3001,
   },
   db: {
     postgres: {
