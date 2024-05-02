@@ -214,8 +214,8 @@ async function update(arr, authNumber) {
     var connection = hana.createConnection();
     connection.connect(hanadb.config);
     for (item of arr) {
-      console.log(item);
-      await getCurrentItemData(item.chasis, item.CIF, connection, authNumber);
+      console.log("###############", item);
+      await getCurrentItemData(item.Chasis, item.CIF, connection, authNumber);
     }
 
     //await Promise.all(promises);
@@ -284,6 +284,7 @@ async function logout() {
 }
 
 async function getCurrentItemData(item, cifVal, connection, authNumber) {
+  console.log(item);
   let selectQuery = `SELECT
   DISTINCT "OADM"."CompnyName" AS "OADM_CompanyName",
 
@@ -393,7 +394,7 @@ AND "_SCGD_VEHICULO"."U_Num_VIN" = '${item}'`;
       await connection.exec(`UPDATE "${schema}"."@GA_VEH_LIBRO_AUX_EN" 
         SET "U_DGIIValCIF"='${cifVal}', 
         "U_DGIIValCO2"='${
-          (data._SCGD_EMISIONES_CO2_U_Porcentaje / 100) * cifVal
+          (data._SCGD_EMISIONES_CO2_U_Porcen / 100) * cifVal
         } ',  
         "U_DGIIValLey557"='${
           (data._SCGD_COBROXTIPO_LEY557_U_Porcentaje / 100) * cifVal
@@ -411,7 +412,7 @@ AND "_SCGD_VEHICULO"."U_Num_VIN" = '${item}'`;
       // schema = data.companyDB;
 
       //var result =
-      console.log(selectQuery);
+      //console.log(selectQuery);
       console.log(data);
 
       let insertQuery = `INSERT INTO ${schema}."@GA_VEH_LIBRO_AUX_EN"(\"Code\", \"Name\", \"U_DocStatusImp\", \"U_ItemCode\", \"U_ItemGroup\",\"U_ItemType\", \"U_ItemId\",
@@ -432,7 +433,7 @@ AND "_SCGD_VEHICULO"."U_Num_VIN" = '${item}'`;
       }\', \'${data._SCGD_ESTILO_U_GB_Modelo}\', \'${
         data._SCGD_VEHICULO_U_Ano_Vehi
       }\', \'${data._SCGD_COLOR_U_Descripcion}\', \'${cifVal}\', \'${
-        data._SCGD_ESPEXMODE_U_CO2
+        (data._SCGD_EMISIONES_CO2_U_Porcen / 100) * cifVal
       }\', \'${
         (parseFloat(data._SCGD_COBROXTIPO_LEY557_U_Porcentaje) / 100) * cifVal
       }\', \'${data._SCGD_COBROXTIPO_Marbete_U_MontoL}\', \'${authNumber}\',
