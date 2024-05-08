@@ -399,9 +399,7 @@ AND "_SCGD_VEHICULO"."U_Num_VIN" = '${item}'`;
         "U_DGIIValLey557"='${
           (data._SCGD_COBROXTIPO_LEY557_U_Porcentaje / 100) * cifVal
         }',  
-        "U_DGIIValMarbete"='${
-          parseFloat(data._SCGD_COBROXTIPO_Marbete_U_MontoL / 100) * cifVal
-        }', 
+        "U_DGIIValMarbete"='${data._SCGD_COBROXTIPO_Marbete_U_MontoL}', 
         "U_AutorizacionDGII" = '${authNumber}'
         WHERE "U_ItemId" ='${item}'
         `);
