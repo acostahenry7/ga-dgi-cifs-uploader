@@ -6,6 +6,7 @@ const app = express();
 
 const auth = require("./components/auth/network");
 const cifs = require("./components/cifs/network");
+const log = require("./components/log/network");
 
 app.listen(config.app.port, () => {
   console.log(`App listening on ${config.app.port}`);
@@ -24,3 +25,4 @@ app.use(
 //ROUTING
 app.use("/api/auth", auth);
 app.use("/api/cifs", cifs);
+app.use("/api/log", log);

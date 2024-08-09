@@ -39,6 +39,8 @@ module.exports = (injectedStore) => {
       //console.log(arr);
 
       arr.map((item) => {
+        console.log("READING FILE....", item);
+
         result.push({
           vin: item.Chasis,
           brand: item.Marca,

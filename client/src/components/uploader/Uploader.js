@@ -7,8 +7,11 @@ import { useNavigate } from "react-router-dom";
 import Summary from "../Summary";
 import ErrorFB from "../validations/ErrorFB";
 import $ from "jquery";
+import { createTransactionLogApi } from "../../api/logs.js";
+import useAuth from "../../hooks/useAuth.js";
 
 export default function Uploader() {
+  const { auth } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [fileSelected, setFileSelected] = useState(undefined);
   const [authNumber, setAuthNumber] = useState("");
@@ -43,6 +46,12 @@ export default function Uploader() {
     setIsLoading(false);
 
     setSummaryData(response.body);
+    // await createTransactionLogApi({
+    //   username: auth.userData.userName,
+    //   comment: `Las unidades con el No. de autorizacion ${authNumber} fuero actualizadas`,
+    //   status: 'ALLOWED',
+    //   cookie: auth.Cookie
+    // })
     return response;
   };
 
@@ -233,6 +242,7 @@ export default function Uploader() {
                               } else {
                                 if (authNumber) {
                                   let res = await syncHandler();
+
                                   console.log(res.status);
                                   if (res?.error == true) {
                                     switch (res?.status) {
