@@ -213,8 +213,8 @@ async function update(arr, authNumber) {
 
     var connection = hana.createConnection();
     connection.connect(hanadb.config);
+    let i = 1;
     for (item of arr) {
-      console.log(item);
       let found = await getCurrentItemData(
         item.Chasis,
         item.CIF,
@@ -222,6 +222,9 @@ async function update(arr, authNumber) {
         authNumber
       );
 
+      console.log("itWasFound ", found);
+      console.log(`${i} of ${arr.length}`);
+      i++;
       if (found) {
         result.updated.push(item);
       } else {
@@ -317,7 +320,7 @@ async function logout() {
 }
 
 async function getCurrentItemData(item, cifVal, connection, authNumber) {
-  console.log("*************", item, cifVal);
+  //console.log("*************", item, cifVal);
   let selectQuery = `
   SELECT DISTINCT "OADM"."CompnyName" AS "OADM_CompanyName",
   "_SCGD_VEHICULO"."U_Cod_Unid" AS "_SCGD_VEHICULO_U_Cod_Unid",
@@ -607,9 +610,9 @@ FROM (
 )
   WHERE "Chasis" = '${item}';`;
 
-  console.log(selectQuery);
   try {
     await connection.exec(`SET SCHEMA ${schema};`);
+    console.log(schema);
 
     let [currentMatch] = connection.exec(`SELECT COUNT(*) as "qty"
     FROM "${schema}"."@GA_VEH_LIBRO_AUX_EN"
@@ -618,7 +621,7 @@ FROM (
     let [data] = await connection.exec(selectQuery);
     let [invoiceData] = await connection.exec(invoiceQuery);
 
-    console.log({ DATA: data, FACTURA: invoiceData });
+    //console.log({ DATA: data, FACTURA: invoiceData });
 
     if (data == undefined || invoiceData == undefined) {
       return false;
@@ -665,7 +668,6 @@ FROM (
 
         //var result =
         //console.log(selectQuery);
-        console.log(`####$ ${invoiceData}`);
 
         let insertQuery = `INSERT INTO ${schema}."@GA_VEH_LIBRO_AUX_EN"(\"Code\", \"Name\", \"U_DocStatusImp\", \"U_ItemCode\", \"U_ItemGroup\",\"U_ItemType\", \"U_ItemId\",
                                             \"U_ItemMarc\", \"U_ItemModel\", \"U_ItemYear\", \"U_ItemColor\", \"U_DGIIValCIF\", \"U_DGIIValCO2\",
@@ -698,7 +700,8 @@ FROM (
           data?._SCGD_VEHICULO_U_Val_CIF
         }\', \'${data?._SCGD_COBROXTIPO_Marbete_U_MontoL}\', \'${
           data?._SCGD_COBROXTIPO_PlacaEx_U_MontoL
-        }\', \'${data?._SCGD_COBROXTIPO_PlacaEx_U_MontoL}\', \'${getDate()}\')`;
+        }\', \'${getDate()}\')`;
+
         await connection.exec(insertQuery);
         console.log(
           `RESULTADO DE CONSULTA EN ${schema} ITEM ${item}`,
@@ -727,8 +730,8 @@ function getDate() {
   minute < 10 ? (minute = "" + minute) : (minute = minute);
   var dayTime = hour >= 12 ? "PM" : "AM";
 
-  const fullDate = `${year}${month.length == 1 ? month : `0${month}`}${
-    date.length == 1 ? date : `0${date}`
+  const fullDate = `${year}${month.length == 1 ? `0${month}` : date}${
+    date.length == 1 ? `0${date}` : date
   }`;
   console.log("@@@@@@@@@@@" + fullDate.toString());
   return fullDate.toString();
