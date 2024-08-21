@@ -730,7 +730,7 @@ function getDate() {
   minute < 10 ? (minute = "" + minute) : (minute = minute);
   var dayTime = hour >= 12 ? "PM" : "AM";
 
-  const fullDate = `${year}${month.length == 1 ? `0${month}` : date}${
+  const fullDate = `${year}${month.length == 1 ? `0${month}` : month}${
     date.length == 1 ? `0${date}` : date
   }`;
   console.log("@@@@@@@@@@@" + fullDate.toString());
