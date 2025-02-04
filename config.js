@@ -1,3 +1,5 @@
+const hostname = process.env.PROD_DB_HOST || "10.1.100.146";
+
 module.exports = {
   app: {
     port: process.env.CIF_DGI_PORT || 3001,
@@ -28,6 +30,6 @@ module.exports = {
     },
   },
   externalSources: {
-    sapServer: "http://172.16.100.146:50001/b1s/v1",
+    sapServer: `http://${hostname}:50001/b1s/v1`,
   },
 };
