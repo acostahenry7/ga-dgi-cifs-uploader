@@ -15,6 +15,7 @@ export default function Uploader() {
   const [isLoading, setIsLoading] = useState(false);
   const [fileSelected, setFileSelected] = useState(undefined);
   const [authNumber, setAuthNumber] = useState("");
+  const [paymentNum, setPaymentNum] = useState("");
   const [authNumError, setAuthNumError] = useState("");
   const [data, setData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -42,7 +43,7 @@ export default function Uploader() {
   const navigate = useNavigate();
   const syncHandler = async () => {
     setIsLoading(true);
-    let response = await sync(fileSelected, authNumber);
+    let response = await sync(fileSelected, authNumber, paymentNum);
     setIsLoading(false);
 
     setSummaryData(response.body);
@@ -167,7 +168,32 @@ export default function Uploader() {
           />
           <span style={{ color: "red", fontSize: 10 }}>{authNumError}</span>
         </div>
-        <div className="col-md-8">
+        <div
+          className="col-md-2 shadow-sm"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            //border: "1px solid rgba(0, 0, 0, 0.1)",
+            borderRadius: 8,
+            backgroundColor: "#eaeaea",
+          }}
+        >
+          <label>Número pago efectuado</label>
+          <input
+            style={{
+              backgroundColor: "rgba(255,255,255,0.4)",
+            }}
+            className="form-control mt-2"
+            type="search"
+            value={paymentNum}
+            onChange={(e) => {
+              setPaymentNum(e.target.value);
+            }}
+          />
+          {/* <span style={{ color: "red", fontSize: 10 }}>{authNumError}</span> */}
+        </div>
+        <div className="col-md-6">
           <div
             className="summary shadow-sm"
             style={{

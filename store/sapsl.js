@@ -202,7 +202,7 @@ async function findAll(entity) {
 //   }
 // }
 
-async function update(arr, authNumber) {
+async function update(arr, authNumber, paymentNum) {
   try {
     //await performSLLogin();
     let result = {
@@ -219,7 +219,8 @@ async function update(arr, authNumber) {
         item.Chasis,
         item.CIF,
         connection,
-        authNumber
+        authNumber,
+        paymentNum
       );
 
       console.log("itWasFound ", found);
@@ -319,7 +320,13 @@ async function logout() {
   }
 }
 
-async function getCurrentItemData(item, cifVal, connection, authNumber) {
+async function getCurrentItemData(
+  item,
+  cifVal,
+  connection,
+  authNumber,
+  paymentNum
+) {
   //console.log("*************", item, cifVal);
   let selectQuery = `
   SELECT DISTINCT "OADM"."CompnyName" AS "OADM_CompanyName",
@@ -610,6 +617,8 @@ FROM (
 )
   WHERE "Chasis" = '${item}';`;
 
+  console.log(invoiceQuery);
+
   try {
     await connection.exec(`SET SCHEMA ${schema};`);
     console.log(schema);
@@ -620,8 +629,7 @@ FROM (
 
     let [data] = await connection.exec(selectQuery);
     let [invoiceData] = await connection.exec(invoiceQuery);
-
-    //console.log({ DATA: data, FACTURA: invoiceData });
+    //console.log(data);
 
     if (data == undefined || invoiceData == undefined) {
       return false;
@@ -637,7 +645,8 @@ FROM (
           }',
           "U_DGIIValMarbete"='${data?._SCGD_COBROXTIPO_Marbete_U_MontoL}',
           "U_AutorizacionDGII" = '${authNumber}',
-  
+          "U_num_pago_efectuado" = '${paymentNum}',
+          "U_fecha_pago_efectuado"='${getDate()}',  
           --DATOS DE LA FACTURA
           "U_IdentCode"='${
             invoiceData && invoiceData["Documento de Identidad"]
@@ -671,7 +680,7 @@ FROM (
 
         let insertQuery = `INSERT INTO ${schema}."@GA_VEH_LIBRO_AUX_EN"(\"Code\", \"Name\", \"U_DocStatusImp\", \"U_ItemCode\", \"U_ItemGroup\",\"U_ItemType\", \"U_ItemId\",
                                             \"U_ItemMarc\", \"U_ItemModel\", \"U_ItemYear\", \"U_ItemColor\", \"U_DGIIValCIF\", \"U_DGIIValCO2\",
-                                            \"U_DGIIValLey557\", \"U_DGIIValMarbete\", \"U_AutorizacionDGII\", \"U_ItemValCIF\", \"U_ItemValCO2\",
+                                            \"U_DGIIValLey557\", \"U_DGIIValMarbete\", \"U_AutorizacionDGII\",\"U_num_pago_efectuado\", \"U_fecha_pago_efectuado\", \"U_ItemValCIF\", \"U_ItemValCO2\",
                                             \"U_ItemValEndoso\", \"U_ItemValLey557\", \"U_ItemValMarbete\", \"U_ItemValPlacaExib\",\"U_DocDate\" )
                                             VALUES (\'${
                                               parseInt(maxId.MAX_Code) + 1
@@ -691,7 +700,9 @@ FROM (
         }\', \'${
           (parseFloat(data?._SCGD_COBROXTIPO_LEY557_U_Porcentaje) / 100) *
           cifVal
-        }\', \'${data?._SCGD_COBROXTIPO_Marbete_U_MontoL}\', \'${authNumber}\',
+        }\', \'${
+          data?._SCGD_COBROXTIPO_Marbete_U_MontoL
+        }\', \'${authNumber}\', \'${paymentNum}\', \'${getDate()}\',
         \'${data?._SCGD_VEHICULO_U_Val_CIF}\', \'${
           parseFloat(data?._SCGD_EMISIONES_CO2_U_Porcen / 100) *
           data?._SCGD_VEHICULO_U_Val_CIF
