@@ -29,7 +29,7 @@ router.post("/upload", upload.single("file"), uploader);
 function update(req, res) {
   console.log(req.body.authNumber);
   cifs
-    .update(req.body.authNumber, req.body.paymentNum)
+    .update(req.body.authNumber, req.body.paymentNum, req.body.paymentDate)
     .then((message) => {
       response.success(req, res, 200, message);
     })

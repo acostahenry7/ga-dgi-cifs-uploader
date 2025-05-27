@@ -58,10 +58,10 @@ module.exports = (injectedStore) => {
     }
   }
 
-  async function update(authNumber, paymentNum) {
+  async function update(authNumber, paymentNum, paymentDate) {
     try {
       let arr = handleFileReading();
-      let data = await store.update(arr, authNumber, paymentNum);
+      let data = await store.update(arr, authNumber, paymentNum, paymentDate);
       // console.log(data);
       deleteUploadedFile();
       return data;

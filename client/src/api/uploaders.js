@@ -15,11 +15,12 @@ export async function upload(data) {
   } catch (error) {}
 }
 
-export async function sync(data, authNumber, paymentNum) {
+export async function sync(data, authNumber, paymentNum, paymentDate) {
   let formData = new FormData();
   formData.append("file", data);
   formData.append("authNumber", authNumber);
   formData.append("paymentNum", paymentNum);
+  formData.append("paymentDate", paymentDate);
 
   try {
     let response = await fetch(`${mainServer}/cifs/update`, {

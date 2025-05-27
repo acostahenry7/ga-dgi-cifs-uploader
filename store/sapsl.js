@@ -202,7 +202,7 @@ async function findAll(entity) {
 //   }
 // }
 
-async function update(arr, authNumber, paymentNum) {
+async function update(arr, authNumber, paymentNum, paymentDate) {
   try {
     //await performSLLogin();
     let result = {
@@ -220,7 +220,8 @@ async function update(arr, authNumber, paymentNum) {
         item.CIF,
         connection,
         authNumber,
-        paymentNum
+        paymentNum,
+        paymentDate
       );
 
       console.log("itWasFound ", found);
@@ -325,7 +326,8 @@ async function getCurrentItemData(
   cifVal,
   connection,
   authNumber,
-  paymentNum
+  paymentNum,
+  paymentDate
 ) {
   //console.log("*************", item, cifVal);
   let selectQuery = `
@@ -646,7 +648,7 @@ FROM (
           "U_DGIIValMarbete"='${data?._SCGD_COBROXTIPO_Marbete_U_MontoL}',
           "U_AutorizacionDGII" = '${authNumber}',
           "U_num_pago_efectuado" = '${paymentNum}',
-          "U_fecha_pago_efectuado"='${getDate()}',  
+          "U_fecha_pago_efectuado"='${paymentDate}',  
           --DATOS DE LA FACTURA
           "U_IdentCode"='${
             invoiceData && invoiceData["Documento de Identidad"]
@@ -702,7 +704,7 @@ FROM (
           cifVal
         }\', \'${
           data?._SCGD_COBROXTIPO_Marbete_U_MontoL
-        }\', \'${authNumber}\', \'${paymentNum}\', \'${getDate()}\',
+        }\', \'${authNumber}\', \'${paymentNum}\', \'${paymentDate}\',
         \'${data?._SCGD_VEHICULO_U_Val_CIF}\', \'${
           parseFloat(data?._SCGD_EMISIONES_CO2_U_Porcen / 100) *
           data?._SCGD_VEHICULO_U_Val_CIF

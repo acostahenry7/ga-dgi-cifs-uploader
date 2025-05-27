@@ -16,6 +16,7 @@ export default function Uploader() {
   const [fileSelected, setFileSelected] = useState(undefined);
   const [authNumber, setAuthNumber] = useState("");
   const [paymentNum, setPaymentNum] = useState("");
+  const [paymentDate, setPaymentDate] = useState("");
   const [authNumError, setAuthNumError] = useState("");
   const [data, setData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -43,7 +44,12 @@ export default function Uploader() {
   const navigate = useNavigate();
   const syncHandler = async () => {
     setIsLoading(true);
-    let response = await sync(fileSelected, authNumber, paymentNum);
+    let response = await sync(
+      fileSelected,
+      authNumber,
+      paymentNum,
+      paymentDate
+    );
     setIsLoading(false);
 
     setSummaryData(response.body);
@@ -149,13 +155,6 @@ export default function Uploader() {
             backgroundColor: "#eaeaea",
           }}
         >
-          {/* <label
-            htmlFor="file-upload"
-            className="uploader"
-            title="Cargar archivo"
-          >
-            <i className="fa-solid fa-upload"></i>
-          </label> */}
           <label>Numero de autorización</label>
           <input
             style={{ backgroundColor: "rgba(255,255,255,0.4)" }}
@@ -164,6 +163,29 @@ export default function Uploader() {
             value={authNumber}
             onChange={(e) => {
               setAuthNumber(e.target.value);
+            }}
+          />
+          <span style={{ color: "red", fontSize: 10 }}>{authNumError}</span>
+        </div>
+        <div
+          className="col-md-2 shadow-sm"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            //border: "1px solid rgba(0, 0, 0, 0.1)",
+            borderRadius: 8,
+            backgroundColor: "#eaeaea",
+          }}
+        >
+          <label>Fecha pago efectuado</label>
+          <input
+            style={{ backgroundColor: "rgba(255,255,255,0.4)" }}
+            className="form-control mt-2"
+            type="date"
+            value={paymentDate}
+            onChange={(e) => {
+              setPaymentDate(e.target.value.replaceAll("-", ""));
             }}
           />
           <span style={{ color: "red", fontSize: 10 }}>{authNumError}</span>
@@ -193,7 +215,7 @@ export default function Uploader() {
           />
           {/* <span style={{ color: "red", fontSize: 10 }}>{authNumError}</span> */}
         </div>
-        <div className="col-md-6">
+        <div className="col-md-4">
           <div
             className="summary shadow-sm"
             style={{
@@ -247,7 +269,7 @@ export default function Uploader() {
                       </div>
                       <div className="col-md-6">
                         <div style={{ flexDirection: "row" }}>
-                          <span
+                          <button
                             style={{
                               width: "100%",
                               marginLeft: "auto",
@@ -258,6 +280,7 @@ export default function Uploader() {
                               borderRadius: 4,
                               fontWeight: "500",
                               marginBottom: 10,
+                              border: "none",
                             }}
                             onClick={async () => {
                               if (fileSelected == undefined) {
@@ -299,11 +322,11 @@ export default function Uploader() {
                             {" "}
                             <i className="fa-solid fa-rotate"></i>
                             &nbsp;Cargar Unidades
-                          </span>
-                          <span
+                          </button>
+                          <button
                             style={{
                               width: "100%",
-                              marginLeft: 5,
+                              //marginLeft: 5,
                               cursor: "pointer",
                               backgroundColor: "#dc3545",
                               color: "white",
@@ -311,6 +334,7 @@ export default function Uploader() {
                               borderRadius: 4,
                               fontWeight: "500",
                               marginBottom: 10,
+                              border: "none",
                             }}
                             onClick={async () => {
                               if (fileSelected == undefined) {
@@ -328,7 +352,7 @@ export default function Uploader() {
                             {" "}
                             <i className="fa-solid fa-trash"></i>
                             &nbsp;Descartar archivo
-                          </span>
+                          </button>
                           <div style={{ marginTop: 10 }}>
                             <Oval
                               height={30}
